@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xk.product.dao.mapper.TransLogMapper" >
+  <resultMap id="BaseResultMap" type="com.xk.product.dao.model.TransLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="thread_name" property="threadName" jdbcType="VARCHAR" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.xk.product.dao.model.TransLogWithBLOBs" extends="BaseResultMap" >
+    <result column="req" property="req" jdbcType="LONGVARCHAR" />
+    <result column="res" property="res" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, thread_name, task_name
+  </sql>
+  <sql id="Blob_Column_List" >
+    req, res
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.xk.product.dao.model.TransLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from trans_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xk.product.dao.model.TransLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from trans_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from trans_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from trans_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xk.product.dao.model.TransLogExample" >
+    delete from trans_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xk.product.dao.model.TransLogWithBLOBs" >
+    insert into trans_log (id, thread_name, task_name, 
+      req, res)
+    values (#{id,jdbcType=INTEGER}, #{threadName,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, 
+      #{req,jdbcType=LONGVARCHAR}, #{res,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xk.product.dao.model.TransLogWithBLOBs" >
+    insert into trans_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="threadName != null" >
+        thread_name,
+      </if>
+      <if test="taskName != null" >
+        task_name,
+      </if>
+      <if test="req != null" >
+        req,
+      </if>
+      <if test="res != null" >
+        res,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="threadName != null" >
+        #{threadName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="req != null" >
+        #{req,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="res != null" >
+        #{res,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xk.product.dao.model.TransLogExample" resultType="java.lang.Integer" >
+    select count(*) from trans_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update trans_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.threadName != null" >
+        thread_name = #{record.threadName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskName != null" >
+        task_name = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.req != null" >
+        req = #{record.req,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.res != null" >
+        res = #{record.res,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update trans_log
+    set id = #{record.id,jdbcType=INTEGER},
+      thread_name = #{record.threadName,jdbcType=VARCHAR},
+      task_name = #{record.taskName,jdbcType=VARCHAR},
+      req = #{record.req,jdbcType=LONGVARCHAR},
+      res = #{record.res,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update trans_log
+    set id = #{record.id,jdbcType=INTEGER},
+      thread_name = #{record.threadName,jdbcType=VARCHAR},
+      task_name = #{record.taskName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xk.product.dao.model.TransLogWithBLOBs" >
+    update trans_log
+    <set >
+      <if test="threadName != null" >
+        thread_name = #{threadName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="req != null" >
+        req = #{req,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="res != null" >
+        res = #{res,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xk.product.dao.model.TransLogWithBLOBs" >
+    update trans_log
+    set thread_name = #{threadName,jdbcType=VARCHAR},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      req = #{req,jdbcType=LONGVARCHAR},
+      res = #{res,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xk.product.dao.model.TransLog" >
+    update trans_log
+    set thread_name = #{threadName,jdbcType=VARCHAR},
+      task_name = #{taskName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

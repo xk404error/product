@@ -20,10 +20,19 @@ public class TestAopContorller {
     TransService transService;
     @RequestMapping("testaop")
     public void test(){
-        CountDownLatch countDownLatch = new CountDownLatch();
-        for (int i = 0; i <100 ; i++) {
-            transService.doWork(String.valueOf(i));
+        try {
+            CountDownLatch countDownLatch = new CountDownLatch(threadNums);
+
+            for (int i = 0; i <100 ; i++) {
+                new Thread(new AopTestRunnable(String.valueOf(i),transService,countDownLatch)).start();
+            }
+            countDownLatch.await();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        /*for (int i = 0; i <100 ; i++) {
+            transService.doWork(String.valueOf(i));
+        }*/
     }
 
 }
