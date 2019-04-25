@@ -5,7 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description: aop测试连接
@@ -21,10 +27,12 @@ public class TestAopContorller {
     @RequestMapping("testaop")
     public void test(){
         try {
+            System.out.println("testAop");
+            LinkedBlockingDeque<Runnable> blockingDeque = new LinkedBlockingDeque<>(2);
             CountDownLatch countDownLatch = new CountDownLatch(threadNums);
-
+            ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 20,60L,TimeUnit.SECONDS,blockingDeque);
             for (int i = 0; i <100 ; i++) {
-                new Thread(new AopTestRunnable(String.valueOf(i),transService,countDownLatch)).start();
+                threadPoolExecutor.execute(new AopTestRunnable(String.valueOf(i),transService,countDownLatch));
             }
             countDownLatch.await();
         } catch (Exception e) {
