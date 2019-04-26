@@ -1,4 +1,4 @@
-package com.xk.product.action;
+package com.xk.product.action.aoptest;
 
 import com.xk.product.service.trans.TransService;
 
@@ -45,7 +45,7 @@ public class AopTestRunnable implements Runnable{
     public void run() {
         transService.doWork(req);
         try {
-            countDownLatch.countDown();
+            //countDownLatch.countDown();
         } catch (Exception e) {
             e.printStackTrace();
         }

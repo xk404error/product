@@ -1,14 +1,11 @@
-package com.xk.product.action;
+package com.xk.product.action.aoptest;
 
 import com.xk.product.service.trans.TransService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -26,21 +23,38 @@ public class TestAopContorller {
     TransService transService;
     @RequestMapping("testaop")
     public void test(){
+        //23:25:06.710
+        //23:25:07.626
+        long start = System.currentTimeMillis();
         try {
             System.out.println("testAop");
-            LinkedBlockingDeque<Runnable> blockingDeque = new LinkedBlockingDeque<>(2);
+            LinkedBlockingDeque<Runnable> blockingDeque = new LinkedBlockingDeque<>(200);
             CountDownLatch countDownLatch = new CountDownLatch(threadNums);
             ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 20,60L,TimeUnit.SECONDS,blockingDeque);
             for (int i = 0; i <100 ; i++) {
                 threadPoolExecutor.execute(new AopTestRunnable(String.valueOf(i),transService,countDownLatch));
             }
-            countDownLatch.await();
+            //countDownLatch.await();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        long end = System.currentTimeMillis();
+        System.out.println("线程池用时"+(start-end));
         /*for (int i = 0; i <100 ; i++) {
             transService.doWork(String.valueOf(i));
         }*/
+
+    }
+    @RequestMapping("testaopwithoutthread")
+    public void testwithoutthread(){
+        //用时1407
+        long start = System.currentTimeMillis();
+        System.out.println("testAopwithoutthread");
+        for (int i = 0; i <100 ; i++) {
+            transService.doWork(String.valueOf(i));
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("不用线程池用时"+(start-end));
     }
 
 }
