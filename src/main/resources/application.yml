@@ -4,7 +4,7 @@ spring:
         url: jdbc:mysql://127.0.0.1:3306/test
         username: root
         password: 123456
-        # 使用druid数据源
+        # 使锟斤拷druid锟斤拷锟斤拷源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
         filters: stat
@@ -20,6 +20,11 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
+    rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: guest
+        password: guest
 mybatis:
   type-aliases-package: com.xk.dao.model
   type-handlers-package: com.xk.dao.mapper
