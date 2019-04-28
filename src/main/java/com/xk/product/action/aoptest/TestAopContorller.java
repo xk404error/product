@@ -1,6 +1,8 @@
 package com.xk.product.action.aoptest;
 
 import com.xk.product.service.trans.TransService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequestMapping("/test")
 public class TestAopContorller {
+    Logger logger=LoggerFactory.getLogger(TestAopContorller.class);
     Integer threadNums=200;
     @Resource
     TransService transService;
@@ -28,17 +31,19 @@ public class TestAopContorller {
         long start = System.currentTimeMillis();
         try {
             System.out.println("testAop");
-            LinkedBlockingDeque<Runnable> blockingDeque = new LinkedBlockingDeque<>(200);
+            LinkedBlockingDeque<Runnable> blockingDeque = new LinkedBlockingDeque<>(500);
             CountDownLatch countDownLatch = new CountDownLatch(threadNums);
             ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 20,60L,TimeUnit.SECONDS,blockingDeque);
-            for (int i = 0; i <100 ; i++) {
+            for (int i = 0; i <300 ; i++) {
                 threadPoolExecutor.execute(new AopTestRunnable(String.valueOf(i),transService,countDownLatch));
             }
             //countDownLatch.await();
+            countDownLatch.await(10L,TimeUnit.SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
         }
         long end = System.currentTimeMillis();
+
         System.out.println("线程池用时"+(start-end));
         /*for (int i = 0; i <100 ; i++) {
             transService.doWork(String.valueOf(i));
@@ -54,7 +59,7 @@ public class TestAopContorller {
             transService.doWork(String.valueOf(i));
         }
         long end = System.currentTimeMillis();
-        System.out.println("不用线程池用时"+(start-end));
+        logger.info("用时"+(start-end));
     }
 
 }
