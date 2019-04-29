@@ -16,10 +16,10 @@ public class TransServiceImpl implements TransService{
     @Override
     @TransLogSave(taskType = 2,interfaceName = "测试")
     public String doWork(String req) {
-        logger.info(req);
+        logger.info("TransService,req="+req);
         Integer reqint=Integer.valueOf(req);
         reqint++;
-        logger.info(reqint.toString());
+        logger.info("TransService,res="+reqint.toString());
         return String.valueOf(reqint);
     }
 }
