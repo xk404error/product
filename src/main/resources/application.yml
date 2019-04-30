@@ -27,6 +27,14 @@ spring:
         password: guest
         publisher-confirms: true
         virtual-host: /
+        publisher-returns: true #消息发送至交换机确认机制，是否确认回调
+        publisher-confirms: true #消息发送至交换机确认机制，是否确认回调
+        listener:
+            simple:
+              acknowledge-mode: manual #手动确认
+              retry:
+                enabled: true
+
 mybatis:
   type-aliases-package: com.xk.dao.model
   type-handlers-package: com.xk.dao.mapper

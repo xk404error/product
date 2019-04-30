@@ -1,8 +1,15 @@
 package com.xk.product.service.mq;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+
+import javax.annotation.Resource;
 
 @Configuration
 public class MqConf {
@@ -14,6 +21,16 @@ public class MqConf {
     public final static String queuefanoutC="fanout.C";
     public final static String exchangeTopic="topicExchange";
     public final static String exchangeFanout="fanoutExchange";
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+    @Bean
+    /** 因为要设置回调类，所以应是prototype类型，如果是singleton类型，则回调类为最后一次设置 */
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public RabbitTemplate rabbitTemplate(){
+        return rabbitTemplate;
+    }
+
     @Bean
     public Queue queueHello(){
         return  new Queue(queueHello);
@@ -55,8 +72,8 @@ public class MqConf {
     }
 
     @Bean
-    Binding bindingExchangeMessage(Queue queueMessage, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queueMessage).to(topicExchange).with("topic.message");
+    Binding bindingExchangeMessage(Queue queueHello, TopicExchange topicExchange) {
+        return BindingBuilder.bind(queueHello).to(topicExchange).with("topic.message");
     }
 
     @Bean
