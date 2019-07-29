@@ -3,7 +3,7 @@ spring:
         name: test
         url: jdbc:mysql://127.0.0.1:3306/test
         username: root
-        password: 123456
+        password: root
         # ʹ��druid����Դ
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -23,9 +23,8 @@ spring:
     rabbitmq:
         host: 127.0.0.1
         port: 5672
-        username: guest
-        password: guest
-        publisher-confirms: true
+        username: admin
+        password: admin
         virtual-host: /
         publisher-returns: true #消息发送至交换机确认机制，是否确认回调
         publisher-confirms: true #消息发送至交换机确认机制，是否确认回调
@@ -34,11 +33,27 @@ spring:
               acknowledge-mode: manual #手动确认
               retry:
                 enabled: true
+    redis:
+      database: 0
+          host: 127.0.0.1
+          port: 6379
+          password: root
+          pool:
+            max-active: 8
+            max-wait: -1
+            max-idle: 8
+            min-idle: 0
+          timeout: 5000
+
+
+
+
 
 mybatis:
   type-aliases-package: com.xk.dao.model
   type-handlers-package: com.xk.dao.mapper
   mapper-locations: classpath:mappers/*.xml
+
 
 
 

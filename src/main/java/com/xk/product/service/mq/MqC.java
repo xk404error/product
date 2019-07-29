@@ -39,17 +39,25 @@ public class MqC {
         log.info("fanout.B,接受信息是"+message);
     }
 
+
     @RabbitListener(queuesToDeclare = @Queue("fanout.C"))
     public void getfanoutMessagesC(String message){
         log.info("fanout.C,接受信息是"+message);
     }
-
+    @RabbitListener(queuesToDeclare = @Queue("fanout.C"))
+    public void getfanoutMessagesC2(String message){
+        log.info("fanout.C2,接受信息是"+message);
+    }
     @RabbitListener(queuesToDeclare  = @Queue("hello"))
     public void mqCAckMessage(String messageStr, Channel channel, Message message) throws IOException {
         try {
             log.info("接收到的消息是"+messageStr);
             log.info("接收到的Message.body是"+String.valueOf(message.getBody()));
+            log.info("接收到的Message.body是"+new String(message.getBody()));
             channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);//false只确认当前一个消息收到，true确认所有consumer获得的消息
+            //channel.basicQos();
+            message.getMessageProperties().setRedelivered(true);
+            channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
         } catch (Exception e) {
             if(message.getMessageProperties().getRedelivered()) {
                 log.info("消息已重复处理失败,拒绝再次接收...");
