@@ -13,7 +13,7 @@ public class RedisConf {
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
     @Bean
-    public RedisTemplate<String,Object> stringRedisTemplate(){
+    public RedisTemplate<String,Object> myRedisTemplate(){
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         DefaultSerializer defaultSerializer = new DefaultSerializer();

@@ -10,21 +10,21 @@ import javax.annotation.Resource;
 @Component
 public class RankByRedis {
     @Resource
-    RedisTemplate stringRedisTemplate;
+    RedisTemplate myRedisTemplate;
     private String rankKey="rankKey";
     public RankDO getRankDOByUserId(String userId){
         //stringRedisTemplate.opsForZSet().
         return null;
     }
     public void updateUserSocre(String userId,String socre){
-        stringRedisTemplate.opsForZSet().add(rankKey,userId,Double.valueOf(socre));
+        myRedisTemplate.opsForZSet().add(rankKey,userId,Double.valueOf(socre));
     }
 
     public RankDO rankUser(String userId){
         RankDO rankDO = new RankDO();
-        Long rank = stringRedisTemplate.opsForZSet().rank(rankKey, userId);
+        Long rank = myRedisTemplate.opsForZSet().rank(rankKey, userId);
         rankDO.setRank(String.valueOf(rank));
-        Double score = stringRedisTemplate.opsForZSet().score(rankKey, userId);
+        Double score = myRedisTemplate.opsForZSet().score(rankKey, userId);
         rankDO.setSocre(String.valueOf(score));
         rankDO.setUserId(userId);
         return rankDO;
